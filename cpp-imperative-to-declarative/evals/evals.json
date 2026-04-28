@@ -1,0 +1,48 @@
+{
+  "skill_name": "cpp-imperative-to-declarative",
+  "evals": [
+    {
+      "id": 0,
+      "name": "refactor-draw-settings",
+      "prompt": "I'm working on dimgui (at /Users/isaiah/projects/dimgui) — a declarative ImGui wrapper using C++23 (cxxlatest). The src/main.cpp file has a function draw_settings that's pure imperative ImGui (eight widgets in one Begin/End block). Refactor it into a declarative form expressed through the dimgui header (include/dimgui/dimgui.hpp — currently a stub). Add only the widget specs you need. Build with `xmake f -m release -y && xmake build app` and confirm it compiles before stopping.",
+      "expected_output": "The agent identifies draw_settings as a refactor candidate, designs widget specs in include/dimgui/dimgui.hpp (Window/Text/Button/Slider*/Checkbox/InputText), updates main.cpp to use them, and verifies the build passes.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "name": "design-wrapper-api",
+      "prompt": "I'm designing the public API for dimgui — a SwiftUI-style declarative wrapper around Dear ImGui — at /Users/isaiah/projects/dimgui/include/dimgui/dimgui.hpp. The header is currently a stub (just declares `version = 0`). Design and implement the API: Window, Text, Button, Checkbox, SliderFloat, SliderInt, InputText. Make it expressive enough to model what src/main.cpp's draw_settings does today, but DO NOT modify main.cpp — just build the API and confirm `xmake build app` still passes.",
+      "expected_output": "The agent designs widget spec types using the Type+State pattern (struct per widget kind, render() member), supports heterogeneous children via tuples or variadic templates, declares them in the header, and the existing main.cpp still builds.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "borderline-judgment",
+      "prompt": "Take a look at draw_debug_overlay in /Users/isaiah/projects/dimgui/src/main.cpp. Should it become declarative like draw_settings would, or is it fine as-is? If declarative, sketch what the call site would look like (no need to actually edit the file).",
+      "expected_output": "The agent considers the small size of draw_debug_overlay (2 lines of widgets), explicitly weighs Layer 1 vs Layer 2 vs leaving it imperative, and gives a reasoned recommendation rather than mechanically applying the pattern.",
+      "files": []
+    }
+  ],
+  "trigger_queries": [
+    {"query": "Help me refactor draw_settings in dimgui's main.cpp from imperative ImGui calls into a declarative tree — the project is at /Users/isaiah/projects/dimgui and uses C++23 (cxxlatest)", "should_trigger": true},
+    {"query": "I want to design a SwiftUI-style wrapper around imgui in C++23, can you help me think through the API for nested children?", "should_trigger": true},
+    {"query": "this code is just a long list of ImGui::Begin/Text/Button/End calls — can we make it look more like the tree it's actually building?", "should_trigger": true},
+    {"query": "I'm building a declarative C++ wrapper over wxWidgets and I'm stuck on how to model heterogeneous children that live in one expression", "should_trigger": true},
+    {"query": "ok so I've got 30 lines of imperative ImGui setup in main.cpp, what's the cleanest C++23 way to express this as data and have one render function consume it?", "should_trigger": true},
+    {"query": "show me how to use std::apply over a tuple of widget specs to render imgui in modern C++", "should_trigger": true},
+    {"query": "this Begin/End block in main.cpp keeps growing every time someone adds a widget — what's the right pattern in modern C++ to keep the call site readable?", "should_trigger": true},
+    {"query": "I want my ImGui code to read like Window{title, Text{...}, Button{...}}.render() but I don't know how to make children of different types live in one expression", "should_trigger": true},
+    {"query": "the indentation in this Begin/End block already looks like a tree but the syntax is flat — annoying. is there a c++ pattern for that?", "should_trigger": true},
+    {"query": "in dimgui (the wrapper i'm building over imgui), how do i make Window{} take a variadic pack of children of different types?", "should_trigger": true},
+    {"query": "How do I link Dear ImGui with xmake on macOS? Getting linker errors about Cocoa and IOKit frameworks", "should_trigger": false},
+    {"query": "My ImGui slider isn't updating the bound float value. I'm passing &value, what am I missing?", "should_trigger": false},
+    {"query": "What's the difference between ImGui::SetNextWindowPos and SetNextWindowSize? Demo code uses both", "should_trigger": false},
+    {"query": "I'm refactoring this Python data pipeline from imperative loops to a declarative pyspark DataFrame API — can you review my approach?", "should_trigger": false},
+    {"query": "Help me set up a C++23 (cxxlatest) project with xmake — I'm getting 'imported module not found' errors", "should_trigger": false},
+    {"query": "Can you explain how immediate-mode GUIs like ImGui differ from retained-mode like Qt? Trying to decide which to use for my tool", "should_trigger": false},
+    {"query": "What's the best way to test ImGui code? Having trouble simulating clicks in unit tests", "should_trigger": false},
+    {"query": "I have a std::vector<std::unique_ptr<Widget>> with virtual draw() — should I switch to std::variant<Widget...> for performance?", "should_trigger": false},
+    {"query": "I want my UI to be data-driven — should I store widget definitions in JSON and load them at runtime?", "should_trigger": false},
+    {"query": "show me the canonical Dear ImGui demo code so i can copy-paste a window with sliders and a button", "should_trigger": false}
+  ]
+}
